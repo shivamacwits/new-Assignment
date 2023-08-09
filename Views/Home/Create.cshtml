@@ -1,0 +1,135 @@
+﻿@model IEnumerable<Assignment.Models.State>
+
+@{
+    ViewData["Title"] = "Home Page";
+    
+}
+
+<form id="addform">
+    <div class="form-horizontal">
+        <h4>Employee</h4>
+        <hr />
+        <div class="text-danger" />
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Employee Name</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" id="EmployeeName" data-parsley-required="true" required />
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Employee DOB</label>
+            <div class="col-md-10">
+                <input class="form-control" type="date" id="EmployeeDOB" required />
+
+            </div>
+        </div>
+        <div class="form-group">
+
+            <div class="col-md-10">
+                Select Gender:<br>
+
+                <input type="radio" name="selectgender" value="1" /> Male
+                <input type="radio" name="selectgender" value="2" />Female
+                <input type="radio" name="selectgender" value="3" />Other
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Address</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="6" id="Address" required></textarea>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">State</label>
+            <div class="col-md-10">
+                <select id="State" name="pax" class="custom-select " required>
+                    <option value="0">please select</option>
+                    @foreach (var item in Model)
+                    {
+
+                        <option value="@item.StateName">@item.StateName</option>
+                    }
+                </select>
+
+            </div>
+        </div>
+        <div class="form-group">
+
+            <div class="col-md-10" id="itemlist">
+                Select Hobies:<br>
+
+                <input type="checkbox" name="Hobby" value="Sports">Sports</input><br />
+                <input type="checkbox" name="Hobby" value="Music">Music</input> <br />
+                <input type="checkbox" name="Hobby" value="Cooking">Cooking</input> <br />
+                <input type="checkbox" name="Hobby" value="Reading">Reading</input> <br />
+                <input type="checkbox" name="Hobby" value="Writing">Writing</input> <br />
+                <input type="checkbox" name="Hobby" value="Photography">Photography</input> <br />
+
+
+            </div>
+        </div>
+
+        <!-- Markup removed for brevity -->
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <a class="btn btn-dark" href="/home/index" style="color:white">List</a>&nbsp;
+                <a class="btn btn-primary" style="color:white" id="btnsubmit">Save</a>
+            </div>
+        </div>
+    </div>
+   
+</form>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            $("#btnsubmit").click(function () {
+                if ($("#EmployeeName").val() == "" || $("#EmployeeName").val() == undefined)
+                    alert("Enter Employee Name");
+                else if ($("#EmployeeDOB").val() == "" || $("#EmployeeDOB").val() == undefined)
+                    alert("Enter Employee DOB");
+                else if ($('input[name="selectgender"]:checked').length < 1)
+                    alert("Select Employee Gender");
+                else if ($("#Address").val() == "" || $("#Address").val() == undefined)
+                    alert("Select Employee Address");
+                else if ($("#State").val() == "" || $("#State").val() == "0" || $("#State").val() == 0)
+                    alert("Select Employee State");
+
+                else {
+
+                    var hobby = $("input[name='Hobby']:checked").map(function () {
+                        return this.value;
+                    }).get().join(', ');
+
+
+                    $.ajax({
+                        url: "/Home/CreateEmployee",
+                        type: "POST",
+                        data: {
+                            Hobbies: hobby,
+                            EmployeeName: $("#EmployeeName").val(),
+                            EmployeeDOB: $("#EmployeeDOB").val(),
+                            Gender: $('input[name="selectgender"]:checked').val(),
+                            Address: $("#Address").val(),
+                            State: $("#State").val()
+                        },
+                        success: function (result) {
+                            alert("DataSave");
+                            location.reload(true);
+                        }
+                    });
+
+                }
+            });
+        });
+
+
+    </script>
+
+
+}

@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Assignment.Models.Employee>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>Index</h1>
+
+    <a style="float: right" class="btn btn-danger"  href="/Home/Create">Create New</a>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>EmployeeId</th>
+            <th>Employee Name</th>
+            <th>Employee DOB</th>
+            <th>Gender</th>
+            <th>Address</th>
+            <th>State</th>
+            <th>Hobbies</th>
+            <th>Action</th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                <td>@item.EmployeeId</td>
+                <td>@item.EmployeeName</td>
+                <td>@item.EmployeeDOB.ToString("dd MMM yyyy")</td>
+                @if (item.Gender == 1)
+                {
+                    <td>Male</td>
+                }
+                else if (item.Gender == 2)
+                {
+                    <td>Female</td>
+                }
+                else
+                {
+                    <td>Other</td>
+                }
+                <td>@item.Address</td>
+                <td>@item.State</td>
+                <td>@item.Hobbies</td>
+                <td>
+                    <a href="/Home/Edit/@item.EmployeeId">Edit</a> |
+                    <a href="/Home/Delete/@item.EmployeeId">Delete</a> 
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
